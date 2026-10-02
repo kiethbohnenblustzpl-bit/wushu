@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#c0392b" />
+<title>武术量化考核评分标准查询</title>
+<meta name="description" content="武术量化考核评分标准（中期考核试行版）在线查询：支持全部规范浏览，也支持按动作名称直接查询对应评分标准。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c0392b'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%23fff' font-family='sans-serif'%3E%E6%AD%A6%3C/text%3E%3C/svg%3E" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="武术考核" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+<div id="assetWarning" hidden style="margin:0;padding:14px 18px;background:#fdf3e4;border-bottom:2px solid #c0392b;color:#5a3a06;font:14px/1.7 -apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <b>样式文件没有加载，页面显示不正常。</b><br />
+  这说明你只打开了 <code>index.html</code>，但没有带上旁边的 <code>assets</code> 文件夹。<br />
+  请改用<strong>《武术考核标准查询_单文件版.html》</strong>（约 40 KB，一个文件就是完整网站），或者把 <code>index.html</code> 和 <code>assets</code> 文件夹放在同一个目录里再打开。
+</div>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">武</span>
+      <div class="brand-text">
+        <h1>武术量化考核评分标准</h1>
+        <p class="brand-sub">中期考核试行版 · 2026.9 制表</p>
+      </div>
+    </div>
+    <div class="score-strip" aria-label="总分构成">
+      <span class="score-chip is-total"><b>160</b><i>总分</i></span>
+      <span class="score-chip"><b>120</b><i>基本功</i></span>
+      <span class="score-chip"><b>30</b><i>套路演练</i></span>
+      <span class="score-chip"><b>10</b><i>平时分</i></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="mode-bar">
+    <div class="modes" role="tablist" aria-label="浏览模式">
+      <button type="button" class="mode" role="tab" id="tab-all" aria-controls="panel-all" aria-selected="true" data-mode="all">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        全部规范
+      </button>
+      <button type="button" class="mode" role="tab" id="tab-lookup" aria-controls="panel-lookup" aria-selected="false" data-mode="lookup">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        按动作查询
+      </button>
+      <button type="button" class="mode" role="tab" id="tab-video" aria-controls="panel-video" aria-selected="false" data-mode="video">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+        视频考核
+      </button>
+    </div>
+    <button type="button" class="ghost-btn" id="printBtn" title="打印或导出为 PDF">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+      <span class="btn-label">打印</span>
+    </button>
+  </div>
+
+  <!-- 模式一：全部规范 -->
+  <section id="panel-all" role="tabpanel" aria-labelledby="tab-all">
+    <div class="toolbar">
+      <div class="field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="filterInput" placeholder="筛选动作或评分要点，如 360、击响、腿法" autocomplete="off" aria-label="筛选动作或评分要点" />
+        <button type="button" class="clear-btn" id="filterClear" hidden aria-label="清空筛选">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="chips" id="categoryChips"></div>
+    </div>
+    <div id="allResults" class="results"></div>
+  </section>
+
+  <!-- 模式二：按动作查询 -->
+  <section id="panel-lookup" role="tabpanel" aria-labelledby="tab-lookup" hidden>
+    <div class="lookup-bar">
+      <div class="field field-lg">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="queryInput" placeholder="输入动作名称，如 旋风脚、侧手翻、tkfj" autocomplete="off" aria-label="输入动作名称" />
+        <button type="button" class="clear-btn" id="queryClear" hidden aria-label="清空">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <p class="hint" id="lookupHint"></p>
+    </div>
+    <div id="lookupResult" class="results"></div>
+  </section>
+
+  <!-- 模式三：视频考核 -->
+  <section id="panel-video" role="tabpanel" aria-labelledby="tab-video" hidden>
+    <div class="vsetup">
+      <label class="vfield">
+        <span>考核动作</span>
+        <select id="vAction"></select>
+      </label>
+      <label class="vfield vfield-sm">
+        <span>被考核人</span>
+        <input type="text" id="vName" placeholder="姓名 / 学号" autocomplete="off" />
+      </label>
+      <div class="vfield">
+        <span>视频来源</span>
+        <div class="vbtns">
+          <button type="button" class="btn" id="vPickFile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M12 3v13"/><path d="m7 8 5-5 5 5"/></svg>
+            选择视频文件
+          </button>
+          <button type="button" class="btn" id="vPickCam">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+            摄像头实时
+          </button>
+          <input type="file" id="vFile" accept="video/*" hidden />
+        </div>
+      </div>
+      <label class="vfield vfield-sm">
+        <span>分析精度</span>
+        <select id="vSpeed">
+          <option value="fast">快速（推荐）</option>
+          <option value="fine">精析（更完整，较慢）</option>
+        </select>
+      </label>
+    </div>
+
+    <p class="vhint vhint-top" id="vHint"></p>
+
+    <div class="vstage" id="vStage" hidden>
+      <video id="vVideo" playsinline muted></video>
+      <canvas id="vCanvas"></canvas>
+    </div>
+
+    <div class="vactions" id="vActions" hidden>
+      <button type="button" class="btn btn-primary" id="vStart">开始分析</button>
+      <button type="button" class="btn" id="vReplay">重放</button>
+      <button type="button" class="btn" id="vRecord" hidden>记入成绩表</button>
+      <button type="button" class="btn" id="vCalib" hidden>把这次结果设为该动作的 10 分参考</button>
+      <span class="vstatus" id="vStatus"></span>
+    </div>
+
+    <div id="vResults" class="results"></div>
+    <div id="vRecords" class="results"></div>
+    <div id="vCalibInfo" class="results"></div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>依据《武术量化考核评分标准（中期考核试行版）》整理，文字与原表一致。</p>
+    <p class="foot-dim">总分 160 分 = 基本功 120 分 + 套路演练 30 分 + 平时分 10 分。根据总分排名减免校园跑次数。</p>
+  </div>
+</footer>
+
+<div id="installBar" class="install-bar" hidden>
+  <span class="install-text" id="installText">把「武术考核」添加到主屏幕，以后点图标直接用</span>
+  <button type="button" class="install-btn" id="installBtn">添加</button>
+  <button type="button" class="install-close" id="installClose" aria-label="不再提示">×</button>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/video.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/video-run.js"></script>
+<script>
+// 当 styles.css 或 app.js 没能加载时（例如只单独发送了 index.html），
+// 页面会退化成无样式的乱版，这里主动给出明确提示，避免“打开的页面不一样”。
+(function () {
+  window.addEventListener("load", function () {
+    var styled = false;
+    try {
+      var bg = getComputedStyle(document.body).backgroundColor;
+      styled = bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent";
+    } catch (e) { /* 保持 false */ }
+    var rendered = document.querySelectorAll(".action").length > 0;
+    if (!styled || !rendered) {
+      var w = document.getElementById("assetWarning");
+      if (w) w.hidden = false;
+    }
+  });
+})();
+</script>
+<script>
+// 让手机可以把网站"装到桌面"：注册 Service Worker + 引导添加到主屏幕。
+// 装到桌面后点图标直接打开，并且离线可用（骨架模型也缓存进了手机）。
+(function () {
+  var KEY = "wushu.install.dismissed";
+  var isFile = location.protocol === "file:";
+  var secure = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+
+  if (!isFile && secure && "serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").then(function () {
+        // 通知 Service Worker 把骨架模型等大文件也在后台缓存好，
+        // 这样手机断网、电脑关机后依然能做视频考核。
+        return navigator.serviceWorker.ready;
+      }).then(function (reg) {
+        if (reg && reg.active) reg.active.postMessage({ type: "warm" });
+      }).catch(function () { /* 注册失败不影响正常使用 */ });
+    });
+  }
+
+  var standalone = window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+  if (isFile || standalone || !secure) return;
+  try { if (localStorage.getItem(KEY) === "1") return; } catch (e) { }
+
+  var bar = document.getElementById("installBar");
+  var text = document.getElementById("installText");
+  var btn = document.getElementById("installBtn");
+  var close = document.getElementById("installClose");
+  if (!bar) return;
+
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPad|iPhone|iPod/.test(ua);
+  var promptEvent = null;
+
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    promptEvent = e;
+    bar.hidden = false;
+  });
+
+  if (isIOS) {
+    text.textContent = "点下方「分享」按钮 → 添加到主屏幕。装好后点图标直接用，电脑关机也能用。";
+    btn.hidden = true;
+    bar.hidden = false;
+  } else {
+    setTimeout(function () {
+      if (!promptEvent) {
+        text.textContent = "浏览器菜单 →「添加到主屏幕」。装好后点图标直接用，电脑关机也能用。";
+        btn.hidden = true;
+        bar.hidden = false;
+      }
+    }, 2500);
+  }
+
+  btn.addEventListener("click", function () {
+    if (!promptEvent) return;
+    promptEvent.prompt();
+    promptEvent = null;
+    bar.hidden = true;
+  });
+  close.addEventListener("click", function () {
+    bar.hidden = true;
+    try { localStorage.setItem(KEY, "1"); } catch (e) { }
+  });
+})();
+</script>
+</body>
+</html>

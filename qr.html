@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>手机扫码打开 · 武术量化考核评分标准</title>
+<style>
+  :root{--ink:#171a20;--ink-2:#4c5462;--ink-3:#7d8592;--line:#e2e5ea;--accent:#c0392b}
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:#f1f2f4;color:var(--ink);
+    font:16px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  }
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:8px;
+    box-shadow:0 1px 2px rgba(23,26,32,.06),0 1px 8px rgba(23,26,32,.05);
+    padding:28px 30px 24px;text-align:center;max-width:min(92vw,560px);
+  }
+  h1{margin:0 0 4px;font-size:19px;font-weight:650}
+  .sub{margin:0 0 18px;font-size:13px;color:var(--ink-3)}
+  #qr{display:inline-block;line-height:0;border:1px solid var(--line);border-radius:6px;padding:10px;background:#fff}
+  #qr svg{width:min(68vw,340px);height:auto;display:block}
+  .url{
+    margin:16px 0 0;font-size:14px;color:var(--ink-2);word-break:break-all;
+    background:#f7f8fa;border:1px solid var(--line);border-radius:6px;padding:9px 12px;
+  }
+  .hint{margin:12px 0 0;font-size:13px;color:var(--ink-3)}
+  .bad{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>手机扫码打开</h1>
+  <p class="sub">用手机相机、微信或 QQ 扫一下即可</p>
+  <div id="qr"></div>
+  <p class="url" id="urlText"></p>
+  <p class="hint" id="hint">手机需要能上网（流量或 WiFi 都可以）。</p>
+</div>
+
+<script src="assets/qrcode.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var target = params.get("u") || "";
+  var title = params.get("t") || "";
+  var qrBox = document.getElementById("qr");
+  var urlText = document.getElementById("urlText");
+  var hint = document.getElementById("hint");
+
+  if (title) document.title = title + " · 扫码打开";
+
+  if (!target) {
+    qrBox.innerHTML = "";
+    urlText.textContent = "没有传入网址";
+    hint.innerHTML = '<span class="bad">缺少 ?u= 参数</span>';
+    return;
+  }
+
+  urlText.textContent = target;
+  try {
+    // qrcode-generator（MIT）：0 = 自动选择版本，M = 纠错等级
+    var qr = qrcode(0, "M");
+    qr.addData(target);
+    qr.make();
+    qrBox.innerHTML = qr.createSvgTag({ cellSize: 8, margin: 1, scalable: true });
+  } catch (e) {
+    hint.innerHTML = '<span class="bad">二维码生成失败：' + (e && e.message ? e.message : e) + "</span>";
+  }
+})();
+</script>
+</body>
+</html>
